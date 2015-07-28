@@ -7,8 +7,19 @@
 {% endblock %}
 
 {% block content %}
-  <p>{{ post.body }}<p>
-  <p>{{ post.created_at }}</p>
+  {% if post.post_type == 'p' %}
+    <p>{{ post.body }}<p>
+  {% endif %}
+  {% if post.post_type == 'v' %}
+    {{ post.embed_code|safe }}
+  {% endif %}
+  {% if post.post_type == 'i' %}
+    <p><img src="{{ post.image_url }}" /><p>
+  {% endif %}
+  {% if post.post_type == 'q' %}
+    <blockquote>{{ post.body }}</blockquote>
+    <p>{{ post.author }}</p>
+  {% endif %}
   <hr>
   <h2>Comments</h2>
   {% if post.comments %}
@@ -18,4 +29,14 @@
       {{ comment.text }}
     {% endfor %}
   {% endif %}
+
+  <h2>Add a comment</h2>
+  <form action="." method="post">
+    {% include "_forms.html" %}
+    <div class="actions">
+      <input type="submit" class="btn primary" value="comment">
+    </div>
+  </form>
+
 {% endblock %}
+
